@@ -1,7 +1,7 @@
 export default function Page() {
   return (
-    <main className="min-h-screen">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+    <section className="py-20">
+      <div className="mx-auto max-w-6xl px-6">
         <p className="text-sm tracking-[0.25em] uppercase text-white/60">
           Soirn Studio
         </p>
@@ -14,6 +14,6 @@ export default function Page() {
           Limited drops. Heavy materials. Sculpted silhouettes.
         </p>
       </div>
-    </main>
+    </section>
   );
 }
