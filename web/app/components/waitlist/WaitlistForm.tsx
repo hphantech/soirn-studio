@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export default function WaitlistForm() {
+type Props = {
+  variant?: "default" | "minimal";
+};
+
+export default function WaitlistForm({ variant = "default" }: Props) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -16,7 +20,7 @@ export default function WaitlistForm() {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "site" }),
+        body: JSON.stringify({ email, source: "waitlist" }),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -37,8 +41,18 @@ export default function WaitlistForm() {
     }
   }
 
+  const inputClass =
+    variant === "minimal"
+      ? "h-12 w-full rounded-full border border-white/20 bg-black/20 px-5 text-white placeholder:text-white/45 outline-none backdrop-blur-md"
+      : "h-12 w-full rounded-full border bg-transparent px-5 text-white placeholder:text-white/40 outline-none";
+
+  const buttonClass =
+    variant === "minimal"
+      ? "h-12 rounded-full bg-white px-6 text-sm text-black hover:opacity-90 disabled:opacity-60"
+      : "h-12 rounded-full bg-white px-6 text-sm text-black hover:opacity-90 disabled:opacity-60";
+
   return (
-    <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-3 sm:flex-row">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
       <input
         type="email"
         name="email"
@@ -46,21 +60,18 @@ export default function WaitlistForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
-        className="h-12 w-full rounded-full border bg-transparent px-5 text-white placeholder:text-white/40 outline-none"
-        style={{ borderColor: "rgba(255,255,255,0.14)" }}
+        className={inputClass}
         disabled={loading}
       />
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="h-12 rounded-full bg-white px-6 text-sm text-black hover:opacity-90 disabled:opacity-60"
-      >
+      <button type="submit" disabled={loading} className={buttonClass}>
         {loading ? "Joining..." : "Join waitlist"}
       </button>
 
       {message && (
-        <p className="text-sm text-white/70 sm:ml-2 sm:self-center">{message}</p>
+        <p className="text-sm text-white/70 sm:ml-3 sm:self-center">
+          {message}
+        </p>
       )}
     </form>
   );

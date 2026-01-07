@@ -19,7 +19,7 @@ export default function Drop001Page() {
           </div>
 
           <Link
-            href="/#waitlist"
+            href="/waitlist"
             className="hidden md:inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm text-black bg-white hover:opacity-90"
           >
             Join waitlist
@@ -73,7 +73,7 @@ export default function Drop001Page() {
               </p>
 
               <Link
-                href="/#waitlist"
+                href="/waitlist"
                 className="mt-6 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm text-black bg-white hover:opacity-90"
               >
                 Join waitlist
