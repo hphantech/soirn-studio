@@ -12,6 +12,10 @@ export type Product = {
   description: string[];
   composition?: string;
   color?: string;
+  
+  // Shopify integration
+  shopifyProductId?: string; // Shopify product ID (gid://shopify/Product/...)
+  shopifyVariants?: Record<string, string>; // Map of size -> Shopify variant ID (gid://shopify/ProductVariant/...)
 };
 
 export const products: Product[] = [

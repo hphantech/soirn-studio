@@ -1,70 +1,126 @@
-import Link from "next/link";
+"use client";
 
-export default function HomePage() {
+import { useRef, useEffect } from "react";
+import Link from "next/link";
+import { gsap } from "gsap";
+
+export default function LandingPage() {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!titleRef.current) return;
+
+    // Split text into characters
+    const text = "soirn";
+    const chars = text.split("").map((char, i) => {
+      const span = document.createElement("span");
+      span.textContent = char === " " ? "\u00A0" : char;
+      span.style.display = "inline-block";
+      span.style.opacity = "0";
+      span.style.transform = "translateY(100%)";
+      return span;
+    });
+
+    // Clear and add characters
+    titleRef.current.innerHTML = "";
+    chars.forEach(char => titleRef.current?.appendChild(char));
+
+    // Create timeline for text reveal
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    // Animate each character with stagger
+    tl.to(chars, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.05,
+    });
+
+    // Animate description
+    if (descriptionRef.current) {
+      tl.to(descriptionRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+      }, "-=0.4");
+    }
+
+    // Animate CTA
+    if (ctaRef.current) {
+      tl.to(ctaRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+      }, "-=0.3");
+    }
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
   return (
     <main className="relative min-h-[100svh] overflow-hidden bg-black">
-      {/* Background media */}
+      {/* Background with subtle animated gradient */}
       <div className="absolute inset-0">
-        {/* VIDEO (preferred) */}
-        <video
-          className="h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/home.jpg"
-        >
-          <source src="/home.mp4" type="video/mp4" />
-        </video>
-
-        {/* IMAGE fallback */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/home.jpg)" }}
-        />
-
-        {/* overlays for readability */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/55" />
-          <div className="absolute inset-0 [background:radial-gradient(70%_70%_at_50%_40%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.35)_55%,rgba(0,0,0,0.85)_100%)]" />
-          {/* optional grain */}
-          {/* <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay bg-[url('/grain.png')]" /> */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-black to-gray-900" />
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
         </div>
       </div>
 
-      {/* Centered campaign copy */}
-      <section className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-6 text-center">
-        <p className="text-xs tracking-[0.45em] uppercase text-white/80">
-          SOIRN STUDIO
-        </p>
+      {/* Header - minimal */}
+      <header className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-6">
+        <Link href="/" className="text-white/60 text-xs tracking-[0.2em] uppercase font-light hover:text-white transition-colors">
+          SOIRN
+        </Link>
+        <Link href="/shop" className="text-white/60 text-xs tracking-[0.1em] uppercase font-light hover:text-white transition-colors">
+          + Menu
+        </Link>
+      </header>
 
-        <h1 className="mt-6 text-5xl font-light leading-[0.92] text-white md:text-7xl">
-          Structured chaos.
-          <br />
-          Built to last.
-        </h1>
+      {/* Hero Section - Freshman style */}
+      <section className="relative z-10 flex min-h-[60vh] flex-col items-center justify-center px-6 sm:px-8 py-12">
+        <div className="mx-auto max-w-5xl w-full text-center">
+          {/* Large brand name with split text reveal */}
+          <h1 
+            ref={titleRef}
+            className="text-6xl md:text-8xl lg:text-[10rem] font-light text-white leading-none tracking-tight overflow-hidden"
+          />
 
-        <p className="mt-7 max-w-md text-sm text-white/70">
-          Limited drops. Heavy materials. Sculpted silhouettes.
-        </p>
-
-        <div className="mt-10 flex items-center gap-3">
-          <Link
-            href="/waitlist"
-            className="rounded-full bg-white px-6 py-3 text-sm text-black hover:opacity-90"
+          {/* Description */}
+          <p 
+            ref={descriptionRef}
+            className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-white/80 font-light leading-relaxed opacity-0 translate-y-4"
           >
-            Join waitlist
-          </Link>
+            Soirn is an underground streetwear brand that creates limited drops with heavy materials and sculpted silhouettes. Built to last.
+          </p>
 
-          <Link
-            href="/drop/drop-001"
-            className="rounded-full border border-white/25 bg-black/20 px-6 py-3 text-sm text-white hover:border-white/40"
+          {/* Tagline with CTA - Freshman style */}
+          <div 
+            ref={ctaRef}
+            className="mt-6 flex items-center justify-center gap-4 opacity-0 translate-y-4"
           >
-            View Drop 001
-          </Link>
+            <span className="text-white/60 text-sm italic font-light">[</span>
+            <Link
+              href="/shop"
+              className="text-white/80 hover:text-white text-sm tracking-[0.1em] uppercase font-light transition-colors"
+            >
+              Shop Collection
+            </Link>
+            <span className="text-white/60 text-sm italic font-light">]</span>
+          </div>
         </div>
       </section>
+
+      {/* Footer - minimal */}
+      <footer className="relative z-10 px-6 sm:px-8 py-4 text-center">
+        <p className="text-xs text-white/40">
+          {new Date().getFullYear()}©
+        </p>
+      </footer>
     </main>
   );
 }

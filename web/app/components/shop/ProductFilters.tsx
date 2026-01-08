@@ -1,88 +1,67 @@
 "use client";
 
 import { useState } from "react";
-import type { Product } from "../../(site)/shop/products";
 
 type FilterProps = {
-  products: Product[];
-  onFilterChange: (filtered: Product[]) => void;
+  onSortChange: (sort: "default" | "price-low" | "price-high" | "name") => void;
+  currentSort: "default" | "price-low" | "price-high" | "name";
 };
 
-export default function ProductFilters({ products, onFilterChange }: FilterProps) {
-  const [sortBy, setSortBy] = useState<"default" | "price-low" | "price-high" | "name">("default");
-  const [statusFilter, setStatusFilter] = useState<"all" | "in_stock" | "coming_soon" | "sold_out">("all");
+export default function ProductFilters({ onSortChange, currentSort }: FilterProps) {
+  const [showSortMenu, setShowSortMenu] = useState(false);
 
-  const handleSortChange = (newSort: typeof sortBy) => {
-    setSortBy(newSort);
-    applyFilters(statusFilter, newSort);
-  };
-
-  const handleStatusChange = (newStatus: typeof statusFilter) => {
-    setStatusFilter(newStatus);
-    applyFilters(newStatus, sortBy);
-  };
-
-  const applyFilters = (status: typeof statusFilter, sort: typeof sortBy) => {
-    let filtered = [...products];
-
-    // Filter by status
-    if (status !== "all") {
-      filtered = filtered.filter((p) => p.status === status);
-    }
-
-    // Sort
-    if (sort === "price-low") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sort === "price-high") {
-      filtered.sort((a, b) => b.price - a.price);
-    } else if (sort === "name") {
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    onFilterChange(filtered);
-  };
+  const sortOptions = [
+    { value: "default" as const, label: "Trend" },
+    { value: "price-low" as const, label: "Price (Low to High)" },
+    { value: "price-high" as const, label: "Price (High to Low)" },
+    { value: "name" as const, label: "New" },
+  ];
 
   return (
-    <div className="flex flex-wrap items-center gap-4 text-sm">
-      <div className="flex items-center gap-2">
-        <span className="text-white/60">Sort:</span>
-        <select
-          value={sortBy}
-          onChange={(e) => handleSortChange(e.target.value as typeof sortBy)}
-          className="rounded-full border bg-white/5 px-4 py-2 text-white/80 outline-none focus:border-white/30"
-          style={{ borderColor: "rgba(255,255,255,0.14)" }}
+    <div className="relative">
+      <button
+        onClick={() => setShowSortMenu(!showSortMenu)}
+        className="rounded-full border px-4 py-1.5 text-xs tracking-[0.1em] uppercase transition-all font-light flex items-center gap-1 text-white/80 border-white/10 bg-transparent backdrop-blur-sm hover:border-white/20 hover:bg-white/5 hover:text-white"
+      >
+        Sort
+        <svg
+          className={`w-3 h-3 transition-transform ${showSortMenu ? "rotate-180" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
         >
-          <option value="default">Default</option>
-          <option value="price-low">Price: Low to High</option>
-          <option value="price-high">Price: High to Low</option>
-          <option value="name">Name</option>
-        </select>
-      </div>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+      </button>
 
-      <div className="flex items-center gap-2">
-        <span className="text-white/60">Filter:</span>
-        <div className="flex gap-2">
-          {(["all", "in_stock", "coming_soon", "sold_out"] as const).map((status) => (
-            <button
-              key={status}
-              onClick={() => handleStatusChange(status)}
-              className={`rounded-full border px-4 py-2 text-xs transition-all ${
-                statusFilter === status
-                  ? "bg-white text-black border-white"
-                  : "text-white/70 hover:text-white border-white/14 hover:border-white/30"
-              }`}
-            >
-              {status === "all"
-                ? "All"
-                : status === "in_stock"
-                ? "In Stock"
-                : status === "coming_soon"
-                ? "Coming Soon"
-                : "Sold Out"}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Sort dropdown menu */}
+      {showSortMenu && (
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setShowSortMenu(false)}
+          />
+          <div className="absolute right-0 top-10 z-20 bg-black border rounded-lg min-w-[200px]" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+            {sortOptions.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => {
+                  onSortChange(option.value);
+                  setShowSortMenu(false);
+                }}
+                className={`w-full text-left px-4 py-2.5 text-xs tracking-[0.05em] uppercase font-light transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                  currentSort === option.value
+                    ? "text-white bg-white/5"
+                    : "text-white/70 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

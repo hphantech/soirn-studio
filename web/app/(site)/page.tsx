@@ -1,70 +1,70 @@
+"use client";
+
 import Link from "next/link";
+import { products } from "./shop/products";
+import ProductSlider from "../components/ui/ProductSlider";
 
 export default function HomePage() {
   return (
     <main className="relative min-h-[100svh] overflow-hidden bg-black">
-      {/* Background media */}
+      {/* Background with subtle animated gradient */}
       <div className="absolute inset-0">
-        {/* VIDEO (preferred) */}
-        <video
-          className="h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/home.jpg"
-        >
-          <source src="/home.mp4" type="video/mp4" />
-        </video>
-
-        {/* IMAGE fallback */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/home.jpg)" }}
-        />
-
-        {/* overlays for readability */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/55" />
-          <div className="absolute inset-0 [background:radial-gradient(70%_70%_at_50%_40%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.35)_55%,rgba(0,0,0,0.85)_100%)]" />
-          {/* optional grain */}
-          {/* <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay bg-[url('/grain.png')]" /> */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-black to-gray-900" />
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
         </div>
       </div>
 
-      {/* Centered campaign copy */}
-      <section className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-6 text-center">
-        <p className="text-xs tracking-[0.45em] uppercase text-white/80 animate-fade-in">
-          SOIRN STUDIO
-        </p>
+      {/* Header - minimal */}
+      <header className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-6">
+        <Link href="/" className="text-white/60 text-xs tracking-[0.2em] uppercase font-light hover:text-white transition-colors">
+          SOIRN
+        </Link>
+        <Link href="/shop" className="text-white/60 text-xs tracking-[0.1em] uppercase font-light hover:text-white transition-colors">
+          + Menu
+        </Link>
+      </header>
 
-        <h1 className="mt-6 text-5xl font-light leading-[0.92] text-white md:text-7xl animate-fade-in-delay">
-          Structured chaos.
-          <br />
-          Built to last.
-        </h1>
+      {/* Hero Section - Freshman style */}
+      <section className="relative z-10 flex min-h-[calc(100svh-200px)] flex-col items-center justify-center px-6 sm:px-8">
+        <div className="mx-auto max-w-5xl w-full text-center">
+          {/* Large brand name */}
+          <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-light text-white leading-none tracking-tight animate-fade-in">
+            soirn
+          </h1>
 
-        <p className="mt-7 max-w-md text-sm text-white/70 animate-fade-in-delay-2">
-          Limited drops. Heavy materials. Sculpted silhouettes.
-        </p>
+          {/* Description */}
+          <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-white/80 font-light leading-relaxed animate-fade-in-delay">
+            Soirn is an underground streetwear brand that creates limited drops with heavy materials and sculpted silhouettes. Built to last.
+          </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-3 animate-fade-in-delay-3">
-          <Link
-            href="/waitlist"
-            className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:opacity-90 transition-all hover:scale-105 active:scale-95"
-          >
-            Join waitlist
-          </Link>
-
-          <Link
-            href="/drop/drop-001"
-            className="rounded-full border border-white/25 bg-black/20 backdrop-blur-sm px-6 py-3 text-sm text-white hover:border-white/40 hover:bg-black/30 transition-all hover:scale-105 active:scale-95"
-          >
-            View Drop 001
-          </Link>
+          {/* Tagline with CTA - Freshman style */}
+          <div className="mt-8 flex items-center justify-center gap-4 animate-fade-in-delay-2">
+            <span className="text-white/60 text-sm italic font-light">[</span>
+            <Link
+              href="/shop"
+              className="text-white/80 hover:text-white text-sm tracking-[0.1em] uppercase font-light transition-colors"
+            >
+              Shop Collection
+            </Link>
+            <span className="text-white/60 text-sm italic font-light">]</span>
+          </div>
         </div>
       </section>
+
+      {/* Product Slider - Freshman style */}
+      <div className="relative z-10 border-t pt-6 pb-4" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+        <div className="px-6 sm:px-8">
+          <ProductSlider products={products} />
+        </div>
+      </div>
+
+      {/* Footer - minimal */}
+      <footer className="relative z-10 px-6 sm:px-8 py-6 text-center">
+        <p className="text-xs text-white/40">
+          {new Date().getFullYear()}©
+        </p>
+      </footer>
     </main>
   );
 }

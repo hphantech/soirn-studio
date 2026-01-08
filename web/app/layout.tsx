@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import CustomCursor from "./components/ui/CustomCursor";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -39,6 +40,7 @@ export default function RootLayout({
           </div>
 
           <div className="relative">{children}</div>
+          <CustomCursor />
         </div>
       </body>
     </html>

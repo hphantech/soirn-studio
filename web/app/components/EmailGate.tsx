@@ -1,116 +1,369 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import LoadingScreen from "./LoadingScreen";
+
+// Import premium plugins
+let ScrollSmoother: any;
+let Flip: any;
+let ScrambleTextPlugin: any;
+
+if (typeof window !== "undefined") {
+    try {
+        ScrollSmoother = require("gsap/ScrollSmoother").ScrollSmoother;
+    } catch (e) {}
+    try {
+        Flip = require("gsap/Flip").Flip;
+    } catch (e) {}
+    try {
+        ScrambleTextPlugin = require("gsap/ScrambleTextPlugin").ScrambleTextPlugin;
+    } catch (e) {}
+    
+    gsap.registerPlugin(ScrollTrigger);
+    if (ScrollSmoother) gsap.registerPlugin(ScrollSmoother);
+    if (Flip) gsap.registerPlugin(Flip);
+    if (ScrambleTextPlugin) gsap.registerPlugin(ScrambleTextPlugin);
+}
+
+// Text groups matching the demo structure
+const textGroups = [
+    {
+        items: [
+            { text: "Structured chaos", pos: "pos-4", altPos: "pos-2" },
+            { text: "Built to last", pos: "pos-4", altPos: "pos-2" },
+            { text: "Limited drops", pos: "pos-4", altPos: "pos-2" },
+        ]
+    },
+    {
+        items: [
+            { text: "Heavy materials", pos: "pos-1", altPos: "pos-3" },
+            { text: "Sculpted silhouettes", pos: "pos-1", altPos: "pos-3" },
+            { text: "Underground", pos: "pos-1", altPos: "pos-3" },
+            { text: "Streetwear", pos: "pos-1", altPos: "pos-3" },
+            { text: "Soirn", pos: "pos-1", altPos: "pos-3" },
+        ]
+    },
+    {
+        items: [
+            { text: "S", pos: "pos-1", altPos: "pos-2", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "アクセス権限がありません", pos: "pos-1", altPos: "pos-3", scrambleDuration: 0 },
+            { text: "█", pos: "pos-1", altPos: "pos-3", isTyping: true },
+        ]
+    },
+    {
+        items: [
+            { text: "Beacon", pos: "pos-2", altPos: "pos-5" },
+            { text: "Synthetic veil", pos: "pos-2", altPos: "pos-5" },
+            { text: "Hidden strata", pos: "pos-2", altPos: "pos-5" },
+        ]
+    },
+    {
+        items: [
+            { text: "O", pos: "pos-3", altPos: "pos-9", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "I", pos: "pos-1", altPos: "pos-3", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "R", pos: "pos-3", altPos: "pos-10", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "N", pos: "pos-2", altPos: "pos-3", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+];
 
 export default function EmailGate() {
-  const router = useRouter();
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const enterButtonRef = useRef<HTMLButtonElement>(null);
 
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+    useEffect(() => {
+        if (!wrapperRef.current || !contentRef.current) return;
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setMsg(null);
+        // Initialize ScrollSmoother if available
+        let smoother: any = null;
+        if (ScrollSmoother) {
+            smoother = ScrollSmoother.create({
+                wrapper: wrapperRef.current,
+                content: contentRef.current,
+                smooth: 1,
+                normalizeScroll: true,
+            });
+        }
 
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "gate" }),
-      });
+        const textElements = contentRef.current.querySelectorAll(".el");
+        
+        // Store original text
+        textElements.forEach((el) => {
+            const element = el as HTMLElement;
+            element.dataset.text = element.textContent || "";
+        });
 
-      const data = await res.json().catch(() => ({}));
+        // Initialize Flip animations for position changes
+        function initFlips() {
+            if (!Flip) return;
+            
+            textElements.forEach((el) => {
+                const element = el as HTMLElement;
+                const originalClass = Array.from(element.classList).find((c) => c.startsWith("pos-"));
+                const targetClass = element.dataset.altPos;
 
-      if (!res.ok) {
-        setMsg(data?.error ?? "Something went wrong. Try again.");
-        setLoading(false);
-        return;
-      }
+                if (!originalClass || !targetClass) return;
 
-      // success (including already)
-      router.push("/landing");
-    } catch {
-      setMsg("Network error. Try again.");
-      setLoading(false);
-    }
-  }
+                const flipEase = element.dataset.flipEase || "expo.inOut";
 
-  return (
-    <main className="relative min-h-[100svh] overflow-hidden bg-black">
-      {/* Background (use your own assets) */}
-      <div className="absolute inset-0">
-        <video
-          className="h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/gate.jpg"
-        >
-          <source src="/gate.mp4" type="video/mp4" />
-        </video>
+                // Temporarily switch to target class
+                element.classList.add(targetClass);
+                element.classList.remove(originalClass);
 
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/gate.jpg)" }}
-        />
+                // Capture FLIP state
+                const flipState = Flip.getState(element, {
+                    props: "opacity, filter, width",
+                });
 
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-black/45" />
-          <div className="absolute inset-0 [background:radial-gradient(70%_70%_at_50%_35%,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0.75)_70%,rgba(0,0,0,0.95)_100%)]" />
-        </div>
-      </div>
+                // Restore original class
+                element.classList.add(originalClass);
+                element.classList.remove(targetClass);
 
-      {/* Top-left label */}
-      <div className="relative z-10 mx-auto max-w-6xl px-6 pt-10">
-        <p className="text-xs tracking-[0.45em] uppercase text-white/75">
-          SOIRN STUDIO
-        </p>
-      </div>
+                // Animate to target position
+                Flip.to(flipState, {
+                    ease: flipEase,
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "clamp(bottom bottom-=10%)",
+                        end: "clamp(center center)",
+                        scrub: true,
+                    },
+                });
 
-      {/* Center copy */}
-      <section className="relative z-10 mx-auto flex min-h-[calc(100svh-120px)] max-w-6xl flex-col items-center justify-center px-6 text-center">
-        <h1 className="text-5xl font-light leading-[0.95] text-white md:text-7xl">
-          Minimal. Grunge. Limited.
-        </h1>
+                // Animate from target position
+                Flip.from(flipState, {
+                    ease: flipEase,
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "clamp(center center)",
+                        end: "clamp(top top)",
+                        scrub: true,
+                    },
+                });
+            });
+        }
 
-        <p className="mt-5 max-w-lg text-sm text-white/70">
-          Dark premium essentials. Small batches. No restocks.
-        </p>
 
-        <form onSubmit={onSubmit} className="mt-10 w-full max-w-md">
-          <div className="flex items-center gap-3">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email to continue"
-              disabled={loading}
-              className="h-12 w-full rounded-full border bg-black/25 px-5 text-sm text-white placeholder:text-white/40 outline-none"
-              style={{ borderColor: "rgba(255,255,255,0.14)" }}
-            />
+        // Initialize scramble text animations
+        function initScramble() {
+            textElements.forEach((el) => {
+                const element = el as HTMLElement;
+                const isTyping = element.classList.contains("typing-indicator");
+                
+                if (isTyping) {
+                    // Typing indicator is handled by CSS animation
+                    return;
+                }
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="h-12 shrink-0 rounded-full bg-white px-6 text-sm text-black hover:opacity-90 disabled:opacity-60"
+                const duration = element.dataset.scrambleDuration 
+                    ? parseFloat(element.dataset.scrambleDuration) 
+                    : 1;
+
+                const text = element.dataset.text || element.textContent || "";
+
+                if (ScrambleTextPlugin) {
+                    ScrollTrigger.create({
+                        trigger: element,
+                        start: "top bottom",
+                        end: "bottom top",
+                        onEnter: () => {
+                            gsap.fromTo(element,
+                                { scrambleText: { text: "", chars: "" } },
+                                {
+                                    scrambleText: {
+                                        text,
+                                        chars: "upperAndLowerCase",
+                                        revealDelay: 0,
+                                    },
+                                    duration,
+                                }
+                            );
+                        },
+                        onEnterBack: () => {
+                            gsap.fromTo(element,
+                                { scrambleText: { text: "", chars: "" } },
+                                {
+                                    scrambleText: {
+                                        text,
+                                        chars: "upperAndLowerCase",
+                                        revealDelay: 0,
+                                    },
+                                    duration,
+                                }
+                            );
+                        },
+                    });
+                } else {
+                    // Fallback: character reveal
+                    ScrollTrigger.create({
+                        trigger: element,
+                        start: "top bottom",
+                        end: "bottom top",
+                        onEnter: () => {
+                            const chars = Array.from(text).map((char) => {
+                                const span = document.createElement("span");
+                                span.textContent = char === " " ? "\u00A0" : char;
+                                span.style.display = "inline-block";
+                                span.style.opacity = "0";
+                                span.style.transform = "translateY(100%)";
+                                return span;
+                            });
+                            
+                            element.innerHTML = "";
+                            chars.forEach(char => element.appendChild(char));
+                            
+                            gsap.to(chars, {
+                                opacity: 1,
+                                y: 0,
+                                duration: duration,
+                                ease: "power3.out",
+                                stagger: {
+                                    amount: duration * 0.5,
+                                    from: "random",
+                                },
+                            });
+                        },
+                    });
+                }
+            });
+        }
+
+        initFlips();
+        initScramble();
+
+        // Animate enter button
+        if (enterButtonRef.current) {
+            gsap.fromTo(enterButtonRef.current,
+                {
+                    opacity: 0,
+                    y: 50,
+                    scale: 0.8,
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 1,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: enterButtonRef.current,
+                        start: "top 95%",
+                        toggleActions: "play none none none",
+                    },
+                }
+            );
+        }
+
+        // Handle resize
+        const handleResize = () => {
+            ScrollTrigger.refresh(true);
+            initFlips();
+            initScramble();
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            if (smoother) {
+                smoother.kill();
+            }
+        };
+    }, []);
+
+    const handleEnter = () => {
+        setIsLoading(true);
+    };
+
+    const handleLoadingComplete = () => {
+        router.push("/landing");
+    };
+
+    return (
+        <>
+            {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
+            <div 
+                ref={wrapperRef}
+                id="smooth-wrapper"
+                className="fixed inset-0 overflow-hidden bg-black"
             >
-              {loading ? "..." : "Continue"}
-            </button>
-          </div>
+                <main 
+                    ref={contentRef}
+                    id="smooth-content"
+                    className="relative min-h-screen"
+                >
+                    {/* Header */}
+                    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-8 py-6 bg-black/80 backdrop-blur-sm border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                        <div className="text-white/60 text-xs tracking-[0.2em] uppercase font-light">
+                            SOIRN
+                        </div>
+                        <div className="text-white/60 text-xs tracking-[0.1em] uppercase font-light">
+                            + Menu
+                        </div>
+                    </header>
 
-          {msg && (
-            <p className="mt-3 text-sm text-white/70">
-              {msg}
-            </p>
-          )}
-        </form>
-      </section>
-    </main>
-  );
+                    {/* Content with proper padding */}
+                    <div className="content">
+                        {textGroups.map((group, groupIndex) => (
+                            <div 
+                                key={groupIndex} 
+                                className="group"
+                            >
+                                {group.items.map((item, itemIndex) => {
+                                    const isLarge = "isLarge" in item && item.isLarge;
+                                    const isTyping = "isTyping" in item && item.isTyping;
+                                    
+                                    return (
+                                        <div
+                                            key={itemIndex}
+                                            className={`el ${item.pos} ${isLarge ? "el--xl" : ""} ${isTyping ? "typing-indicator" : ""}`}
+                                            data-alt-pos={item.altPos}
+                                            data-scramble-duration={("scrambleDuration" in item ? item.scrambleDuration : 1)}
+                                        >
+                                            {item.text}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Enter button at the bottom */}
+                    <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-16 bg-black/80 backdrop-blur-sm border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                        <button
+                            ref={enterButtonRef}
+                            onClick={handleEnter}
+                            className="px-10 py-5 text-sm tracking-[0.2em] uppercase text-white/80 hover:text-white font-light transition-all border rounded-full hover:scale-110"
+                            style={{ borderColor: "rgba(255,255,255,0.2)" }}
+                        >
+                            Enter
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </>
+    );
 }
