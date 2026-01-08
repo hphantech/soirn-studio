@@ -58,8 +58,11 @@ export default function CartDrawer() {
           <div className="flex items-center justify-between mb-6 pb-4 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
             <div>
               <p className="text-sm font-medium text-white">
-                {count === 0 ? "Your bag is empty" : `Your bag (${count})`}
+                {count === 0 ? "Your bag is empty" : `Your bag`}
               </p>
+              {count > 0 && (
+                <p className="text-xs text-white/50 mt-0.5">{count} {count === 1 ? "item" : "items"}</p>
+              )}
             </div>
 
             <button
