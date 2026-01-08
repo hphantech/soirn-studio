@@ -17,15 +17,13 @@ export default function CartButton() {
   return (
     <button
       onClick={toggle}
-      className="relative rounded-full border px-4 py-2 text-sm text-white/80 hover:text-white"
-      style={{ borderColor: "rgba(255,255,255,0.14)" }}
+      className="relative text-sm text-white/80 hover:text-white transition-colors"
       aria-label="Open cart"
       type="button"
     >
       Cart
-
       {mounted && count > 0 && (
-        <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-white px-1 text-[11px] font-medium text-black">
+        <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-white px-1 text-[10px] font-medium text-black">
           {count}
         </span>
       )}

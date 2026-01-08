@@ -28,10 +28,10 @@ export default function AddToCart({
           <button
             key={s}
             onClick={() => setSize(s)}
-            className={`h-10 px-4 rounded-full border text-sm ${
+            className={`h-10 px-4 rounded-full border text-sm transition-all ${
               size === s
-                ? "bg-white text-black"
-                : "text-white/80 hover:text-white"
+                ? "bg-white text-black font-medium"
+                : "text-white/80 hover:text-white border-white/20 hover:border-white/30"
             }`}
             disabled={disabled}
           >
@@ -43,7 +43,7 @@ export default function AddToCart({
       <button
         onClick={() => addItem({ slug, name, price, image, size })}
         disabled={disabled}
-        className="h-12 w-full rounded-full bg-white text-black"
+        className="h-12 w-full rounded-full bg-white text-sm font-medium text-black hover:opacity-90 disabled:opacity-40 transition-all hover:scale-[1.02] active:scale-[0.98]"
       >
         Add to cart
       </button>

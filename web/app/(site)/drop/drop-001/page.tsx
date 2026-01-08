@@ -20,7 +20,7 @@ export default function Drop001Page() {
 
           <Link
             href="/waitlist"
-            className="hidden md:inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm text-black bg-white hover:opacity-90"
+            className="hidden md:inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-black bg-white hover:opacity-90 transition-all hover:scale-105 active:scale-95"
           >
             Join waitlist
           </Link>
@@ -74,7 +74,7 @@ export default function Drop001Page() {
 
               <Link
                 href="/waitlist"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm text-black bg-white hover:opacity-90"
+                className="mt-6 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-medium text-black bg-white hover:opacity-90 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Join waitlist
               </Link>

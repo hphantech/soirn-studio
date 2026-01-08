@@ -18,13 +18,13 @@ export default function AboutPage() {
         <div className="mt-10 flex gap-4">
           <Link
             href="/drop/drop-001"
-            className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm text-black hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:opacity-90 transition-all hover:scale-105 active:scale-95"
           >
             View Drop 001
           </Link>
           <Link
-            href="/#waitlist"
-            className="inline-flex items-center justify-center rounded-full border px-6 py-3 text-sm text-white/80 hover:text-white"
+            href="/waitlist"
+            className="inline-flex items-center justify-center rounded-full border px-6 py-3 text-sm text-white/80 hover:text-white transition-all hover:scale-105 active:scale-95"
             style={{ borderColor: "rgba(255,255,255,0.14)" }}
           >
             Join waitlist

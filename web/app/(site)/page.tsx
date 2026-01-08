@@ -35,31 +35,31 @@ export default function HomePage() {
 
       {/* Centered campaign copy */}
       <section className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-6 text-center">
-        <p className="text-xs tracking-[0.45em] uppercase text-white/80">
+        <p className="text-xs tracking-[0.45em] uppercase text-white/80 animate-fade-in">
           SOIRN STUDIO
         </p>
 
-        <h1 className="mt-6 text-5xl font-light leading-[0.92] text-white md:text-7xl">
+        <h1 className="mt-6 text-5xl font-light leading-[0.92] text-white md:text-7xl animate-fade-in-delay">
           Structured chaos.
           <br />
           Built to last.
         </h1>
 
-        <p className="mt-7 max-w-md text-sm text-white/70">
+        <p className="mt-7 max-w-md text-sm text-white/70 animate-fade-in-delay-2">
           Limited drops. Heavy materials. Sculpted silhouettes.
         </p>
 
-        <div className="mt-10 flex items-center gap-3">
+        <div className="mt-10 flex flex-col sm:flex-row items-center gap-3 animate-fade-in-delay-3">
           <Link
             href="/waitlist"
-            className="rounded-full bg-white px-6 py-3 text-sm text-black hover:opacity-90"
+            className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:opacity-90 transition-all hover:scale-105 active:scale-95"
           >
             Join waitlist
           </Link>
 
           <Link
             href="/drop/drop-001"
-            className="rounded-full border border-white/25 bg-black/20 px-6 py-3 text-sm text-white hover:border-white/40"
+            className="rounded-full border border-white/25 bg-black/20 backdrop-blur-sm px-6 py-3 text-sm text-white hover:border-white/40 hover:bg-black/30 transition-all hover:scale-105 active:scale-95"
           >
             View Drop 001
           </Link>

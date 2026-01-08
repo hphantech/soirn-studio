@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { products } from "../../shop/products";
 import AddToCart from "../../../components/cart/AddToCart";
+import ImageGallery from "../../../components/ui/ImageGallery";
 
 function formatPrice(cents: number) {
   return `€${(cents / 100).toFixed(2)}`;
@@ -22,22 +22,8 @@ export default async function ProductPage({ params }: PageProps) {
   return (
     <main className="mx-auto max-w-6xl px-6 py-14">
       <div className="grid gap-12 lg:grid-cols-2">
-        {/* LEFT: image */}
-        <div
-          className="relative overflow-hidden rounded-2xl border bg-white/[0.02]"
-          style={{ borderColor: "rgba(255,255,255,0.10)" }}
-        >
-          <div className="relative aspect-[4/5]">
-            <Image
-              src={heroImage}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-          </div>
-        </div>
+        {/* LEFT: image gallery */}
+        <ImageGallery images={product.images.length > 0 ? product.images : [heroImage]} />
 
         {/* RIGHT: info */}
         <div className="pt-2">
@@ -69,7 +55,7 @@ export default async function ProductPage({ params }: PageProps) {
             )}
           </div>
 
-          {/* Add to cart (THIS uses useCart) */}
+          {/* Add to cart */}
           <AddToCart
             slug={product.slug}
             name={product.name}
