@@ -128,7 +128,7 @@ function LookbookImage({
     return (
         <section 
             ref={sectionRef}
-            className="h-screen snap-start flex justify-center items-center relative overflow-hidden"
+            className="h-[70vh] snap-start flex justify-center items-center relative overflow-hidden"
         >
             <div 
                 ref={imageRef}
@@ -194,7 +194,12 @@ export default function LookbookPage() {
         <>
             <style jsx global>{`
                 html {
-                    scroll-snap-type: y mandatory;
+                    scroll-snap-type: y proximity;
+                }
+                @media (prefers-reduced-motion: no-preference) {
+                    html {
+                        scroll-behavior: smooth;
+                    }
                 }
             `}</style>
             <main className="bg-black min-h-screen">

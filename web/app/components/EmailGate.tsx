@@ -43,7 +43,6 @@ const textGroups = [
             { text: "Sculpted silhouettes", pos: "pos-1", altPos: "pos-3" },
             { text: "Underground", pos: "pos-1", altPos: "pos-3" },
             { text: "Streetwear", pos: "pos-1", altPos: "pos-3" },
-            { text: "Soirn", pos: "pos-1", altPos: "pos-3" },
         ]
     },
     {
@@ -84,6 +83,70 @@ const textGroups = [
             { text: "N", pos: "pos-2", altPos: "pos-3", isLarge: true, scrambleDuration: 2.5 },
         ]
     },
+    {
+        items: [
+            { text: "Dark matter", pos: "pos-1", altPos: "pos-4" },
+            { text: "Quantum flux", pos: "pos-1", altPos: "pos-4" },
+            { text: "Neural pathways", pos: "pos-1", altPos: "pos-4" },
+        ]
+    },
+    {
+        items: [
+            { text: "S", pos: "pos-2", altPos: "pos-6", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "T", pos: "pos-3", altPos: "pos-7", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "U", pos: "pos-1", altPos: "pos-8", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "D", pos: "pos-2", altPos: "pos-9", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "I", pos: "pos-3", altPos: "pos-10", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "O", pos: "pos-1", altPos: "pos-2", isLarge: true, scrambleDuration: 2.5 },
+        ]
+    },
+    {
+        items: [
+            { text: "Phantom signal", pos: "pos-4", altPos: "pos-3" },
+            { text: "Echo chamber", pos: "pos-4", altPos: "pos-3" },
+            { text: "Void space", pos: "pos-4", altPos: "pos-3" },
+        ]
+    },
+    {
+        items: [
+            { text: "操作は許可されていません", pos: "pos-1", altPos: "pos-3", scrambleDuration: 0 },
+            { text: "█", pos: "pos-1", altPos: "pos-3", isTyping: true },
+        ]
+    },
+    {
+        items: [
+            { text: "Latent energy", pos: "pos-2", altPos: "pos-5" },
+            { text: "Spectral imprint", pos: "pos-2", altPos: "pos-5" },
+            { text: "Muted emission", pos: "pos-2", altPos: "pos-5" },
+        ]
+    },
+    {
+        items: [
+            { text: "Residual charge", pos: "pos-3", altPos: "pos-6" },
+            { text: "Optical trace", pos: "pos-3", altPos: "pos-6" },
+            { text: "Soft output", pos: "pos-3", altPos: "pos-6" },
+        ]
+    },
 ];
 
 export default function EmailGate() {
@@ -92,6 +155,7 @@ export default function EmailGate() {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const enterButtonRef = useRef<HTMLButtonElement>(null);
+    const brandTextRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (!wrapperRef.current || !contentRef.current) return;
@@ -253,6 +317,136 @@ export default function EmailGate() {
         initFlips();
         initScramble();
 
+        // Add additional scroll-based animations for text elements
+        textElements.forEach((el) => {
+            const element = el as HTMLElement;
+            
+            // Blur effect on scroll
+            ScrollTrigger.create({
+                trigger: element,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+                    const blur = Math.abs(progress - 0.5) * 4;
+                    gsap.to(element, {
+                        filter: `blur(${blur}px)`,
+                        duration: 0.1,
+                    });
+                },
+            });
+
+            // Rotation effect for large elements
+            if (element.classList.contains("el--xl")) {
+                ScrollTrigger.create({
+                    trigger: element,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true,
+                    onUpdate: (self) => {
+                        const progress = self.progress;
+                        const rotation = (progress - 0.5) * 20;
+                        gsap.to(element, {
+                            rotation: rotation,
+                            duration: 0.1,
+                        });
+                    },
+                });
+            }
+
+            // Scale effect
+            ScrollTrigger.create({
+                trigger: element,
+                start: "top bottom",
+                end: "center center",
+                scrub: true,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+                    const scale = 0.8 + (progress * 0.4);
+                    gsap.to(element, {
+                        scale: scale,
+                        duration: 0.1,
+                    });
+                },
+            });
+        });
+
+        // Animate "Soirn Studio" brand text in the middle
+        if (brandTextRef.current) {
+            // Split text into characters for animation
+            const text = brandTextRef.current.textContent || "";
+            brandTextRef.current.innerHTML = "";
+            const chars = Array.from(text).map((char, i) => {
+                const span = document.createElement("span");
+                span.textContent = char === " " ? "\u00A0" : char;
+                span.style.display = "inline-block";
+                span.style.opacity = "0";
+                span.style.transform = "translateY(100px) rotateX(90deg)";
+                return span;
+            });
+            chars.forEach(char => brandTextRef.current?.appendChild(char));
+
+            // Initial reveal animation
+            gsap.to(chars, {
+                opacity: 1,
+                y: 0,
+                rotationX: 0,
+                duration: 1.5,
+                ease: "back.out(1.7)",
+                stagger: {
+                    amount: 0.8,
+                    from: "center",
+                },
+                scrollTrigger: {
+                    trigger: brandTextRef.current,
+                    start: "top 80%",
+                    toggleActions: "play none none none",
+                },
+            });
+
+            // Continuous scroll animations
+            ScrollTrigger.create({
+                trigger: brandTextRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+                    const scale = 1 + (progress * 0.3);
+                    const blur = progress * 2;
+                    const opacity = 1 - (progress * 0.4);
+                    
+                    gsap.to(brandTextRef.current, {
+                        scale,
+                        filter: `blur(${blur}px)`,
+                        opacity: Math.max(0.6, opacity),
+                        duration: 0.1,
+                    });
+                },
+            });
+
+            // Rotation animation on scroll
+            ScrollTrigger.create({
+                trigger: brandTextRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+                    const rotation = progress * 360;
+                    gsap.to(chars, {
+                        rotationY: rotation,
+                        duration: 0.1,
+                        stagger: {
+                            amount: 0.3,
+                            from: "random",
+                        },
+                    });
+                },
+            });
+        }
+
         // Animate enter button
         if (enterButtonRef.current) {
             gsap.fromTo(enterButtonRef.current,
@@ -313,7 +507,8 @@ export default function EmailGate() {
                 <main 
                     ref={contentRef}
                     id="smooth-content"
-                    className="relative min-h-screen"
+                    className="relative"
+                    style={{ minHeight: "500vh" }}
                 >
                     {/* Header */}
                     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-8 py-6 bg-black/80 backdrop-blur-sm border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
@@ -324,6 +519,24 @@ export default function EmailGate() {
                             + Menu
                         </div>
                     </header>
+
+                    {/* "Soirn Studio" centered brand text */}
+                    <div 
+                        ref={brandTextRef}
+                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none"
+                        style={{ 
+                            fontFamily: "var(--font-geist-mono)",
+                            fontSize: "clamp(3rem, 12vw, 8rem)",
+                            fontWeight: 400,
+                            letterSpacing: "0.05em",
+                            textTransform: "uppercase",
+                            color: "rgba(255, 255, 255, 0.95)",
+                            transformStyle: "preserve-3d",
+                            perspective: "1000px",
+                        }}
+                    >
+                        Soirn Studio
+                    </div>
 
                     {/* Content with proper padding */}
                     <div className="content">

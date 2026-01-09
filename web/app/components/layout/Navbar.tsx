@@ -124,7 +124,7 @@ export default function Navbar() {
               height: "100vh"
             }}
           >
-            <div className="flex flex-col h-full p-8 overflow-y-auto">
+            <div className="flex flex-col h-full p-8 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
             {/* Close button */}
             <div className="flex justify-end mb-12">
               <button
