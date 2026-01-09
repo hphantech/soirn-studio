@@ -13,10 +13,11 @@ export default function ProductCardHover() {
                 const image = card.querySelector("img");
                 if (!image) return;
 
-                const handleMouseMove = (e: MouseEvent) => {
+                const handleMouseMove = (e: Event) => {
+                    const mouseEvent = e as MouseEvent;
                     const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+                    const x = mouseEvent.clientX - rect.left;
+                    const y = mouseEvent.clientY - rect.top;
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
                     const rotateX = (y - centerY) / 15;
