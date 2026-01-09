@@ -1,73 +1,113 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCart } from "../../components/cart/CartProvider";
 
-export default function Navbar() {
+interface NavbarProps {
+  transparent?: boolean;
+}
+
+export default function Navbar({ transparent = false }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { toggle: toggleCart, count } = useCart();
   const [mounted, setMounted] = useState(false);
+  const menuContentRef = useRef<HTMLDivElement>(null);
+  const scrollPositionRef = useRef(0);
 
   // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Prevent body scroll when menu is open
+  // Handle menu open/close with scroll position management
   useEffect(() => {
     if (menuOpen) {
+      // Save current scroll position
+      scrollPositionRef.current = window.scrollY;
+      
+      // Prevent body scroll and fix body position
       document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollPositionRef.current}px`;
+      document.body.style.width = "100%";
+      
+      // Reset menu content scroll to top
+      if (menuContentRef.current) {
+        menuContentRef.current.scrollTop = 0;
+      }
     } else {
+      // Restore body scroll and position
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      
+      // Restore scroll position
+      window.scrollTo(0, scrollPositionRef.current);
     }
+    
     return () => {
+      // Cleanup on unmount
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
     };
   }, [menuOpen]);
 
   return (
     <>
       <header
-        className="sticky top-0 z-50 w-full border-b bg-black"
-        style={{
+        className={`sticky top-0 z-50 w-full ${transparent ? '' : 'border-b bg-black'}`}
+        style={transparent ? {} : {
           borderColor: "rgba(255,255,255,0.08)",
         }}
       >
-        <div className="mx-auto flex items-center justify-between px-6 py-4">
-          {/* Hamburger menu - left */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="text-white/80 hover:text-white transition-colors"
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
+        <div className={`mx-auto flex items-center justify-between ${transparent ? 'px-6 sm:px-8 py-6' : 'px-6 py-4'}`}>
+          {/* Hamburger menu / Menu button - left */}
+          {transparent ? (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-white/60 text-xs tracking-[0.1em] uppercase font-light hover:text-white transition-colors"
+              aria-label="Toggle menu"
             >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              )}
-            </svg>
-          </button>
+              + Menu
+            </button>
+          ) : (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-white/80 hover:text-white transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+              >
+                {menuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                )}
+              </svg>
+            </button>
+          )}
 
           {/* Brand name - center */}
           <Link
             href="/landing"
-            className="text-xs tracking-[0.3em] uppercase text-white hover:opacity-80 transition-opacity font-light"
+            className={`${transparent ? 'text-white/60 text-xs tracking-[0.2em] uppercase font-light hover:text-white transition-colors' : 'text-xs tracking-[0.3em] uppercase text-white hover:opacity-80 transition-opacity font-light'}`}
           >
             SOIRN
           </Link>
@@ -75,7 +115,7 @@ export default function Navbar() {
           {/* Cart icon - right */}
           <button
             onClick={toggleCart}
-            className="relative text-white/80 hover:text-white transition-colors"
+            className={`relative ${transparent ? 'text-white/60 hover:text-white' : 'text-white/80 hover:text-white'} transition-colors`}
             aria-label="Open cart"
           >
             <svg
@@ -102,15 +142,11 @@ export default function Navbar() {
 
       {/* Hamburger menu - slides from left */}
       {menuOpen && (
-        <div
-          className="fixed inset-0 z-[60]"
-          style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
-        >
-          {/* Backdrop */}
+        <>
+          {/* Backdrop - closes menu on click */}
           <div
+            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
             onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
-            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
           />
           
           {/* Menu panel - slides from left */}
@@ -121,10 +157,22 @@ export default function Navbar() {
               position: "fixed",
               top: 0,
               left: 0,
-              height: "100vh"
+              height: "100vh",
+              willChange: "transform"
+            }}
+            onClick={(e) => {
+              // Prevent closing when clicking inside menu
+              e.stopPropagation();
             }}
           >
-            <div className="flex flex-col h-full p-8 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
+            <div 
+              ref={menuContentRef}
+              className="flex flex-col h-full p-8 overflow-y-auto overscroll-contain" 
+              style={{ 
+                WebkitOverflowScrolling: "touch",
+                scrollBehavior: "smooth"
+              }}
+            >
             {/* Close button */}
             <div className="flex justify-end mb-12">
               <button
@@ -203,7 +251,7 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
-      </div>
+        </>
       )}
     </>
   );

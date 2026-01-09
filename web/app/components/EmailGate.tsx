@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LoadingScreen from "./LoadingScreen";
+import Navbar from "./layout/Navbar";
 
 // Import premium plugins
 let ScrollSmoother: any;
@@ -510,15 +511,10 @@ export default function EmailGate() {
                     className="relative"
                     style={{ minHeight: "500vh" }}
                 >
-                    {/* Header */}
-                    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-8 py-6 bg-black/80 backdrop-blur-sm border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                        <div className="text-white/60 text-xs tracking-[0.2em] uppercase font-light">
-                            SOIRN
-                        </div>
-                        <div className="text-white/60 text-xs tracking-[0.1em] uppercase font-light">
-                            + Menu
-                        </div>
-                    </header>
+                    {/* Header - transparent navbar */}
+                    <div className="fixed top-0 left-0 right-0 z-50">
+                        <Navbar transparent />
+                    </div>
 
                     {/* "Soirn Studio" centered brand text */}
                     <div 

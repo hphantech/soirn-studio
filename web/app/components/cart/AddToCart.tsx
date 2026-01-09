@@ -23,27 +23,32 @@ export default function AddToCart({
 
   return (
     <div className="mt-6 space-y-4">
-      <div className="flex gap-2 flex-wrap">
-        {sizes.map((s) => (
-          <button
-            key={s}
-            onClick={() => setSize(s)}
-            className={`h-10 px-4 rounded-full border text-sm transition-all ${
-              size === s
-                ? "bg-white text-black font-medium"
-                : "text-white/80 hover:text-white border-white/20 hover:border-white/30"
-            }`}
-            disabled={disabled}
-          >
-            {s}
-          </button>
-        ))}
+      {/* Size selection */}
+      <div>
+        <p className="text-sm text-white/80 font-light mb-3">Size: {size}</p>
+        <div className="flex gap-2 flex-wrap">
+          {sizes.map((s) => (
+            <button
+              key={s}
+              onClick={() => setSize(s)}
+              className={`h-9 px-4 border text-xs transition-all font-light ${
+                size === s
+                  ? "bg-white text-black"
+                  : "text-white/80 hover:text-white border-white/20 hover:border-white/30 bg-transparent"
+              }`}
+              disabled={disabled}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* Add to cart button */}
       <button
         onClick={() => addItem({ slug, name, price, image, size })}
         disabled={disabled}
-        className="h-12 w-full rounded-full bg-white text-sm font-medium text-black hover:opacity-90 disabled:opacity-40 transition-all hover:scale-[1.02] active:scale-[0.98]"
+        className="h-12 w-full bg-black border border-white/20 text-sm font-light text-white hover:bg-white hover:text-black disabled:opacity-40 disabled:hover:bg-black disabled:hover:text-white transition-all"
       >
         Add to cart
       </button>

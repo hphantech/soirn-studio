@@ -15,16 +15,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Header - minimal */}
-      <header className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-6">
-        <Link href="/" className="text-white/60 text-xs tracking-[0.2em] uppercase font-light hover:text-white transition-colors">
-          SOIRN
-        </Link>
-        <Link href="/shop" className="text-white/60 text-xs tracking-[0.1em] uppercase font-light hover:text-white transition-colors">
-          + Menu
-        </Link>
-      </header>
-
       {/* Hero Section - Freshman style */}
       <section className="relative z-10 flex min-h-[calc(100svh-200px)] flex-col items-center justify-center px-6 sm:px-8">
         <div className="mx-auto max-w-5xl w-full text-center">

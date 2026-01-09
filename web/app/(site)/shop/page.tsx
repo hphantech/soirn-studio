@@ -7,7 +7,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { products } from "./products";
 import ProductFilters from "../../components/shop/ProductFilters";
-import ScrollProgress from "../../components/ui/ScrollProgress";
 import ProductCardHover from "../../components/ui/ProductCardHover";
 import type { Product } from "./products";
 
@@ -100,12 +99,22 @@ export default function ShopPage() {
 
   const [showAllMenu, setShowAllMenu] = useState(false);
 
+  // Prevent scrolling on this page
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
+
   return (
-    <main className="bg-black min-h-screen">
-      <ScrollProgress />
+    <main className="bg-black h-screen overflow-hidden flex flex-col">
       <ProductCardHover />
       {/* Header with All, Search, Sort - PAF style */}
-      <div className="mx-auto max-w-[95vw] px-4 sm:px-6 py-4">
+      <div className="mx-auto max-w-[95vw] px-4 sm:px-6 py-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           {/* Left: All and Search buttons */}
           <div className="flex items-center gap-3">
@@ -202,15 +211,16 @@ export default function ShopPage() {
       </div>
 
       {/* Product count */}
-      <div className="mx-auto max-w-[95vw] px-4 sm:px-6 py-3">
+      <div className="mx-auto max-w-[95vw] px-4 sm:px-6 py-2 flex-shrink-0">
         <p className="text-xs text-white/40">
           {filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"}
         </p>
       </div>
 
-      {/* Product Grid - 3 products per row, larger */}
-      <div className="mx-auto max-w-[95vw] px-4 sm:px-6 py-8">
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+      {/* Product Grid - Scrollable container */}
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="mx-auto max-w-[95vw] px-4 sm:px-6 py-3 pb-6">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filteredProducts.map((p, index) => (
             <Link
               key={p.slug}
@@ -267,6 +277,7 @@ export default function ShopPage() {
               </div>
             </Link>
           ))}
+          </div>
         </div>
       </div>
     </main>

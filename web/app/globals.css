@@ -242,3 +242,24 @@ a, button {
   display: inline-block;
   animation: blink-cursor 0.7s linear infinite;
 }
+
+/* Glitch transition effects */
+@keyframes glitch-scan {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.glitch-scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 255, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+  animation: glitch-scan 0.1s linear infinite;
+  pointer-events: none;
+  z-index: 10000;
+}

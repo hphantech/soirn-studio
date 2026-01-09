@@ -9,6 +9,17 @@ export default function LandingPage() {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
+  // Prevent scrolling on this page
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
+
   useEffect(() => {
     if (!titleRef.current) return;
 
@@ -62,7 +73,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <main className="relative min-h-[100svh] overflow-hidden bg-black">
+    <main className="relative h-screen overflow-hidden bg-black flex flex-col">
       {/* Background with subtle animated gradient */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-black to-gray-900" />
@@ -71,29 +82,19 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Header - minimal */}
-      <header className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-6">
-        <Link href="/" className="text-white/60 text-xs tracking-[0.2em] uppercase font-light hover:text-white transition-colors">
-          SOIRN
-        </Link>
-        <Link href="/shop" className="text-white/60 text-xs tracking-[0.1em] uppercase font-light hover:text-white transition-colors">
-          + Menu
-        </Link>
-      </header>
-
-      {/* Hero Section - Freshman style */}
-      <section className="relative z-10 flex min-h-[60vh] flex-col items-center justify-center px-6 sm:px-8 py-12">
+      {/* Hero Section - Perfectly centered in one screen */}
+      <section className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 sm:px-8 -mt-12 sm:-mt-16">
         <div className="mx-auto max-w-5xl w-full text-center">
           {/* Large brand name with split text reveal */}
           <h1 
             ref={titleRef}
-            className="text-6xl md:text-8xl lg:text-[10rem] font-light text-white leading-none tracking-tight overflow-hidden"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[9rem] font-light text-white leading-none tracking-tight overflow-hidden"
           />
 
           {/* Description */}
           <p 
             ref={descriptionRef}
-            className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-white/80 font-light leading-relaxed opacity-0 translate-y-4"
+            className="mt-3 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-white/80 font-light leading-relaxed opacity-0 translate-y-4"
           >
             Soirn is an underground streetwear brand that creates limited drops with heavy materials and sculpted silhouettes. Built to last.
           </p>
@@ -101,7 +102,7 @@ export default function LandingPage() {
           {/* Tagline with CTA - Freshman style */}
           <div 
             ref={ctaRef}
-            className="mt-6 flex items-center justify-center gap-4 opacity-0 translate-y-4"
+            className="mt-4 sm:mt-6 flex items-center justify-center gap-4 opacity-0 translate-y-4"
           >
             <span className="text-white/60 text-sm italic font-light">[</span>
             <Link
@@ -114,13 +115,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      {/* Footer - minimal */}
-      <footer className="relative z-10 px-6 sm:px-8 py-4 text-center">
-        <p className="text-xs text-white/40">
-          {new Date().getFullYear()}©
-        </p>
-      </footer>
     </main>
   );
 }
