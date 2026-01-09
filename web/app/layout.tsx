@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import CustomCursor from "./components/ui/CustomCursor";
+import CartRoot from "./components/cart/CartRoot";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,20 +29,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black text-white`}
       >
-        <div className="min-h-screen">
-          {/* subtle glow + grain */}
-          <div className="pointer-events-none fixed inset-0">
-            <div
-  className="absolute -top-64 left-1/3 h-[600px] w-[600px] rounded-full blur-[140px]"
-  style={{ background: "rgba(255,255,255,0.08)" }}
-/>
+        <CartRoot>
+          <div className="min-h-screen">
+            {/* subtle glow + grain */}
+            <div className="pointer-events-none fixed inset-0">
+              <div
+    className="absolute -top-64 left-1/3 h-[600px] w-[600px] rounded-full blur-[140px]"
+    style={{ background: "rgba(255,255,255,0.08)" }}
+  />
 
-            <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] [background-size:18px_18px]" />
+              <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] [background-size:18px_18px]" />
+            </div>
+
+            <div className="relative">{children}</div>
+            <CustomCursor />
           </div>
-
-          <div className="relative">{children}</div>
-          <CustomCursor />
-        </div>
+        </CartRoot>
       </body>
     </html>
   );
