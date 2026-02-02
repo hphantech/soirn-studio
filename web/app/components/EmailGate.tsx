@@ -33,7 +33,7 @@ if (typeof window !== "undefined") {
 const textGroups = [
     {
         items: [
-            { text: "Structured chaos", pos: "pos-4", altPos: "pos-" },
+            { text: "Structured chaos", pos: "pos-4", altPos: "pos-2" },
             { text: "Built to last", pos: "pos-4", altPos: "pos-2" },
             { text: "Limited drops", pos: "pos-4", altPos: "pos-2" },
         ]

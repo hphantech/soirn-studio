@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import NewsletterPopup from "../components/layout/NewsletterPopup";
 import CookieConsent from "../components/layout/CookieConsent";
 import PageTransition from "../components/ui/PageTransition";
 
@@ -18,7 +17,6 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
         <Navbar transparent />
         <main className="flex-1">{children}</main>
         {!hideFooter && <Footer />}
-        <NewsletterPopup />
         <CookieConsent />
       </div>
     </PageTransition>

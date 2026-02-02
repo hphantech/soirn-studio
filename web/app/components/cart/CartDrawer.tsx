@@ -296,12 +296,6 @@ export default function CartDrawer() {
                     >
                       Account
                     </Link>
-                    <Link
-                      href="/signin"
-                      className="text-xs text-white/50 hover:text-white/70 transition-colors font-light"
-                    >
-                      Sign in
-                    </Link>
                   </div>
 
                   {/* Clear cart */}
