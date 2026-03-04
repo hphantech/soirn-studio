@@ -32,7 +32,7 @@ export const lookbookData: Look[] = [
     products: [
       { name: "Essential Hoodie", href: "/product/essential-hoodie" },
     ],
-    credits: "Photography by Soirn Studio",
+    credits: "Photography by the studio",
     aspect: "portrait",
   },
   {
@@ -87,6 +87,26 @@ export const lookbookData: Look[] = [
     season: "DROP 001 / AW25",
     media: [
       { type: "image", src: "/products/hoodie-2.jpg", alt: "Look 006 - Main" },
+    ],
+    aspect: "portrait",
+  },
+  {
+    id: "007",
+    slug: "look-007",
+    season: "DROP 001 / AW25",
+    media: [
+      { type: "image", src: "/products/hoodie-3.jpg", alt: "Look 007 - Main" },
+      { type: "image", src: "/products/hoodie-black.jpg", alt: "Look 007 - Detail" },
+    ],
+    aspect: "landscape",
+  },
+  {
+    id: "008",
+    slug: "look-008",
+    season: "DROP 001 / AW25",
+    media: [
+      { type: "image", src: "/products/hoodie-black.jpg", alt: "Look 008 - Main" },
+      { type: "image", src: "/products/hoodie-1.jpg", alt: "Look 008 - Detail" },
     ],
     aspect: "portrait",
   },

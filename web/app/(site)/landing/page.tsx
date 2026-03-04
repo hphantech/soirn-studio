@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
+import { brandConfig } from "@/src/config/brand";
 
 export default function LandingPage() {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -23,8 +24,8 @@ export default function LandingPage() {
   useEffect(() => {
     if (!titleRef.current) return;
 
-    // Split text into characters
-    const text = "soirn";
+    // Split brand name into characters
+    const text = brandConfig.brandName;
     const chars = text.split("").map((char, i) => {
       const span = document.createElement("span");
       span.textContent = char === " " ? "\u00A0" : char;
@@ -96,7 +97,7 @@ export default function LandingPage() {
             ref={descriptionRef}
             className="mt-3 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-white/80 font-light leading-relaxed opacity-0 translate-y-4"
           >
-            Soirn is an underground streetwear brand that creates limited drops with heavy materials and sculpted silhouettes. Built to last.
+            {brandConfig.description}
           </p>
 
           {/* Tagline with CTA - Freshman style */}

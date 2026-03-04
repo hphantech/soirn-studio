@@ -1,5 +1,5 @@
-import EmailGate from "./components/EmailGate";
+import { redirect } from "next/navigation";
 
-export default function GatePage() {
-  return <EmailGate />;
+export default function RootRedirectPage() {
+  redirect("/landing");
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { products } from "./shop/products";
 import ProductSlider from "../components/ui/ProductSlider";
+import { brandConfig } from "@/src/config/brand";
 
 export default function HomePage() {
   return (
@@ -20,41 +21,37 @@ export default function HomePage() {
         <div className="mx-auto max-w-5xl w-full text-center">
           {/* Large brand name */}
           <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-light text-white leading-none tracking-tight animate-fade-in">
-            soirn
+            {brandConfig.brandName}
           </h1>
 
           {/* Description */}
           <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-white/80 font-light leading-relaxed animate-fade-in-delay">
-            Soirn is an underground streetwear brand that creates limited drops with heavy materials and sculpted silhouettes. Built to last.
+            {brandConfig.description}
           </p>
 
-          {/* Tagline with CTA - Freshman style */}
+          {/* Tagline with CTA */}
           <div className="mt-8 flex items-center justify-center gap-4 animate-fade-in-delay-2">
             <span className="text-white/60 text-sm italic font-light">[</span>
             <Link
-              href="/shop"
+              href={brandConfig.primaryCtaHref}
               className="text-white/80 hover:text-white text-sm tracking-[0.1em] uppercase font-light transition-colors"
             >
-              Shop Collection
+              {brandConfig.primaryCtaLabel}
             </Link>
             <span className="text-white/60 text-sm italic font-light">]</span>
           </div>
         </div>
       </section>
 
-      {/* Product Slider - Freshman style */}
-      <div className="relative z-10 border-t pt-6 pb-4" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+      {/* Product Slider */}
+      <div
+        className="relative z-10 border-t pt-6 pb-4"
+        style={{ borderColor: "rgba(255,255,255,0.08)" }}
+      >
         <div className="px-6 sm:px-8">
           <ProductSlider products={products} />
         </div>
       </div>
-
-      {/* Footer - minimal */}
-      <footer className="relative z-10 px-6 sm:px-8 py-6 text-center">
-        <p className="text-xs text-white/40">
-          {new Date().getFullYear()}©
-        </p>
-      </footer>
     </main>
   );
 }

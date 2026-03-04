@@ -34,7 +34,7 @@ type CartContextValue = {
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
-const STORAGE_KEY = "soirn_cart_v1";
+const STORAGE_KEY = "brand_cart_v1";
 
 function safeParse(raw: string | null): CartItem[] {
   if (!raw) return [];

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import CustomCursor from "./components/ui/CustomCursor";
 import CartRoot from "./components/cart/CartRoot";
 import "./globals.css";
+import { brandConfig } from "@/src/config/brand";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Soirn Studio",
-  description: "Structured chaos. Built to last.",
+  title: {
+    default: brandConfig.brandName,
+    template: `%s · ${brandConfig.brandName}`,
+  },
+  description: brandConfig.description,
+  openGraph: {
+    title: brandConfig.brandName,
+    description: brandConfig.description,
+  },
 };
 
 export default function RootLayout({

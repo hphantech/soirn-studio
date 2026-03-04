@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { brandConfig } from "@/src/config/brand";
+
+const STORAGE_KEY = `${brandConfig.brandName.toLowerCase()}_newsletter_seen`;
 
 export default function NewsletterPopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +13,7 @@ export default function NewsletterPopup() {
 
   useEffect(() => {
     // Show popup after 3 seconds if user hasn't subscribed
-    const hasSeenPopup = localStorage.getItem("soirn_newsletter_seen");
+    const hasSeenPopup = localStorage.getItem(STORAGE_KEY);
     if (!hasSeenPopup) {
       const timer = setTimeout(() => setIsOpen(true), 3000);
       return () => clearTimeout(timer);
@@ -38,7 +41,7 @@ export default function NewsletterPopup() {
       }
 
       setMessage("Thanks! You're in.");
-      localStorage.setItem("soirn_newsletter_seen", "true");
+      localStorage.setItem(STORAGE_KEY, "true");
       setTimeout(() => {
         setIsOpen(false);
       }, 2000);
@@ -56,7 +59,7 @@ export default function NewsletterPopup() {
       <div
         onClick={() => {
           setIsOpen(false);
-          localStorage.setItem("soirn_newsletter_seen", "true");
+          localStorage.setItem(STORAGE_KEY, "true");
         }}
         className="fixed inset-0 z-[80] bg-black/70 backdrop-blur-sm"
       />
@@ -74,7 +77,7 @@ export default function NewsletterPopup() {
           <button
             onClick={() => {
               setIsOpen(false);
-              localStorage.setItem("soirn_newsletter_seen", "true");
+              localStorage.setItem(STORAGE_KEY, "true");
             }}
             className="absolute right-4 top-4 text-white/60 hover:text-white"
             aria-label="Close"

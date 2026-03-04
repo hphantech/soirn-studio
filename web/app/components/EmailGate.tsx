@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LoadingScreen from "./LoadingScreen";
 import Navbar from "./layout/Navbar";
+import { brandConfig } from "@/src/config/brand";
 
 // Import premium plugins
 let ScrollSmoother: any;
@@ -373,7 +374,7 @@ export default function EmailGate() {
             });
         });
 
-        // Animate "Soirn Studio" brand text in the middle
+        // Animate brand text in the middle
         if (brandTextRef.current) {
             // Split text into characters for animation
             const text = brandTextRef.current.textContent || "";
@@ -516,7 +517,7 @@ export default function EmailGate() {
                         <Navbar transparent />
                     </div>
 
-                    {/* "Soirn Studio" centered brand text */}
+                    {/* Centered brand text */}
                     <div 
                         ref={brandTextRef}
                         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none"
@@ -531,7 +532,7 @@ export default function EmailGate() {
                             perspective: "1000px",
                         }}
                     >
-                        Soirn Studio
+                        {brandConfig.brandName}
                     </div>
 
                     {/* Content with proper padding */}

@@ -1,6 +1,6 @@
 # Shopify Headless Checkout Setup Guide
 
-This guide will help you set up Shopify headless checkout for your Soirn Studio website.
+This guide will help you set up Shopify headless checkout for your brand website.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ This guide will help you set up Shopify headless checkout for your Soirn Studio 
 2. Go to **Settings** → **Apps and sales channels**
 3. Click **Develop apps** (or **Manage private apps** if using older Shopify)
 4. Click **Create an app**
-5. Name it something like "Soirn Studio Storefront"
+5. Name it something like "Brand Storefront"
 6. Click **Create app**
 7. Click **Configure Admin API scopes** and grant the following permissions:
    - `read_products`

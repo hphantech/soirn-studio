@@ -1,3 +1,5 @@
+import { brandConfig } from "@/src/config/brand";
+
 export default function ContactPage() {
   return (
     <section className="py-20">
@@ -11,7 +13,7 @@ export default function ContactPage() {
 
         <p className="mt-6 max-w-2xl text-white/70 leading-relaxed">
           For collaborations, support, or press:{" "}
-          <span className="text-white">contact@soirnstudio.com</span>
+          <span className="text-white">{brandConfig.email}</span>
         </p>
 
         <p className="mt-3 max-w-2xl text-white/50 text-sm">

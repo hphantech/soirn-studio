@@ -2,24 +2,28 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { brandConfig } from "@/src/config/brand";
 
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("soirn_cookie_consent");
+    const key = `${brandConfig.brandName.toLowerCase()}_cookie_consent`;
+    const consent = localStorage.getItem(key);
     if (!consent) {
       setIsVisible(true);
     }
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("soirn_cookie_consent", "accepted");
+    const key = `${brandConfig.brandName.toLowerCase()}_cookie_consent`;
+    localStorage.setItem(key, "accepted");
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem("soirn_cookie_consent", "declined");
+    const key = `${brandConfig.brandName.toLowerCase()}_cookie_consent`;
+    localStorage.setItem(key, "declined");
     setIsVisible(false);
   };
 

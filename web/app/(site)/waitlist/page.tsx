@@ -41,7 +41,7 @@ export default function WaitlistPage() {
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-6 text-center">
         {/* Small top label */}
         <p className="text-xs tracking-[0.45em] uppercase text-white/85">
-          SOIRN STUDIO
+          EARLY ACCESS
         </p>
 
         {/* Big centered headline (minimal) */}

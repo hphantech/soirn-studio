@@ -66,6 +66,9 @@ export default function GradientCarousel({ looks }: GradientCarouselProps) {
   const lastTRef = useRef(0);
   const lastDeltaRef = useRef(0);
 
+  // Optional visual bias for fine-tuning (currently neutral)
+  const centerOffsetRef = useRef(0);
+
   // Safe modulo
   const mod = useCallback((n: number, m: number) => {
     return ((n % m) + m) % m;
@@ -293,12 +296,12 @@ export default function GradientCarousel({ looks }: GradientCarouselProps) {
     }
   }, [transformForScreenX]);
 
-  // Set active gradient - DISABLED: Use fixed dark gradient instead
+  // Set active gradient - fixed dark brand gradient
   const setActiveGradient = useCallback((idx: number) => {
     if (idx < 0 || idx >= itemsRef.current.length || idx === activeIndexRef.current) return;
 
     activeIndexRef.current = idx;
-    // Fixed dark Soirn Studio gradient - no color extraction
+    // Fixed dark gradient - no color extraction
     const to = {
       r1: 20,
       g1: 20,
@@ -365,7 +368,7 @@ export default function GradientCarousel({ looks }: GradientCarouselProps) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    // Dark Soirn Studio background
+    // Dark brand background
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, w, h);
 
@@ -415,6 +418,7 @@ export default function GradientCarousel({ looks }: GradientCarouselProps) {
     cardWRef.current = r.width || 300;
     stepRef.current = cardWRef.current + GAP;
     trackRef.current = itemsRef.current.length * stepRef.current;
+    centerOffsetRef.current = 0;
 
     itemsRef.current.forEach((it, i) => {
       it.x = i * stepRef.current;
@@ -569,7 +573,9 @@ export default function GradientCarousel({ looks }: GradientCarouselProps) {
   useEffect(() => {
     if (!imagesLoaded || itemsRef.current.length === 0) return;
 
-    vwHalfRef.current = window.innerWidth * 0.5;
+    const stage = stageRef.current;
+    const stageWidth = stage?.getBoundingClientRect().width ?? window.innerWidth;
+    vwHalfRef.current = stageWidth * 0.5;
     measure();
     updateCarouselTransforms();
     stageRef.current?.classList.add("carousel-mode");
@@ -659,7 +665,10 @@ export default function GradientCarousel({ looks }: GradientCarouselProps) {
     const handleResize = () => {
       const prevStep = stepRef.current || 1;
       const ratio = scrollXRef.current / (itemsRef.current.length * prevStep);
-      vwHalfRef.current = window.innerWidth * 0.5;
+      const rect = stage.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
+      vwHalfRef.current = width * 0.5;
+      centerOffsetRef.current = 0;
       measure();
       scrollXRef.current = mod(ratio * trackRef.current, trackRef.current);
       updateCarouselTransforms();

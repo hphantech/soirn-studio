@@ -93,6 +93,19 @@ a, button {
   animation: fade-in 0.8s ease-out 0.6s both;
 }
 
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out forwards;
+}
+
 /* Hide scrollbar for product slider */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -359,7 +372,7 @@ a, button {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(26vw, 360px);
+  width: min(30vw, 420px);
   aspect-ratio: 4/5;
   isolation: isolate;
   transform-style: preserve-3d;
